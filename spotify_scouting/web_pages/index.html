@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Input Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h1 class="text-2xl font-bold mb-4 text-center">Advanced Input</h1>
+
+        <!-- Randomize Checkbox -->
+        <div class="mb-4">
+            <label class="inline-flex items-center">
+                <input
+                    type="checkbox"
+                    id="randomizeCheckbox"
+                    name="randomize"
+                    class="form-checkbox h-5 w-5 text-blue-600"
+                    onchange="toggleRandomize()"
+                >
+                <span class="ml-2 text-gray-700">Randomize</span>
+            </label>
+        </div>
+
+        <!-- Sliders -->
+        <div class="space-y-4">
+            <div>
+                <label for="targetAcousticness" class="block text-sm font-medium text-gray-700">Target acousticness</label>
+                <input
+                    type="range"
+                    id="targetAcousticness"
+                    name="targetAcousticness"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetAcousticnessValue" class="text-sm text-gray-600">50</span>
+            </div>
+
+            <div>
+                <label for="targetLiveness" class="block text-sm font-medium text-gray-700">Target liveness</label>
+                <input
+                    type="range"
+                    id="targetLiveness"
+                    name="targetLiveness"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetLivenessValue" class="text-sm text-gray-600">50</span>
+            </div>
+
+            <div>
+                <label for="targetDanceability" class="block text-sm font-medium text-gray-700">Target danceability</label>
+                <input
+                    type="range"
+                    id="targetDanceability"
+                    name="targetDanceability"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetDanceabilityValue" class="text-sm text-gray-600">50</span>
+            </div>
+
+            <div>
+                <label for="targetValence" class="block text-sm font-medium text-gray-700">Target valence</label>
+                <input
+                    type="range"
+                    id="targetValence"
+                    name="targetValence"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetValenceValue" class="text-sm text-gray-600">50</span>
+            </div>
+
+            <div>
+                <label for="targetEnergy" class="block text-sm font-medium text-gray-700">Target energy</label>
+                <input
+                    type="range"
+                    id="targetEnergy"
+                    name="targetEnergy"
+                    min="0"
+                    max="100"
+                    value="50"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetEnergyValue" class="text-sm text-gray-600">50</span>
+            </div>
+
+            <div>
+                <label for="targetPopularity" class="block text-sm font-medium text-gray-700">Target popularity</label>
+                <input
+                    type="range"
+                    id="targetPopularity"
+                    name="targetPopularity"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-input-no-randomize"
+                    oninput="updateSliderValue(this)"
+                >
+                <span id="targetPopularityValue" class="text-sm text-gray-600">0</span>
+            </div>
+
+            <!-- By Artist Checkbox -->
+            <div class="mt-4">
+                <label class="inline-flex items-center">
+                    <input
+                        type="checkbox"
+                        id="byArtistCheckbox"
+                        name="byArtist"
+                        class="form-checkbox h-5 w-5 text-blue-600"
+                    >
+                    <span class="ml-2 text-gray-700">By Artist</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Text Input and Submit Button -->
+        <div class="flex space-x-2 mt-4">
+            <input 
+                type="text" 
+                id="textInput" 
+                name="userInput"
+                placeholder="Type something here..."
+                class="flex-grow p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button 
+                onclick="handleSubmit()" 
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            >
+                Submit
+            </button>
+        </div>
+        <p id="output" class="mt-4 text-center"></p>
+    </div>
+
+    <script>
+    // Function to update slider value display
+    function updateSliderValue(slider) {
+        const valueSpan = document.getElementById(`${slider.id}Value`);
+        valueSpan.textContent = slider.value;
+    }
+
+    // Function to toggle randomize mode
+    function toggleRandomize() {
+        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
+        const sliders = document.querySelectorAll('.slider-input');
+
+        if (randomizeCheckbox.checked) {
+            // Disable sliders and set random values
+            sliders.forEach(slider => {
+                slider.disabled = true;
+                slider.classList.add('opacity-50', 'cursor-not-allowed');
+
+                // Set random value between 0 and 100
+                const randomValue = Math.floor(Math.random() * 101);
+                slider.value = randomValue;
+
+                // Update corresponding value display
+                const valueSpan = document.getElementById(`${slider.id}Value`);
+                valueSpan.textContent = randomValue;
+            });
+        } else {
+            // Enable sliders
+            sliders.forEach(slider => {
+                slider.disabled = false;
+                slider.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+        }
+    }
+
+    async function handleSubmit() {
+        const input = document.getElementById('textInput');
+        const output = document.getElementById('output');
+        const byArtistCheckbox = document.getElementById('byArtistCheckbox');
+        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
+
+        // Collect slider values
+        const sliderValues = {};
+        for (let i = 1; i <= 6; i++) {
+            sliderValues[`slider${i}`] = document.getElementById(`slider${i}`).value;
+        }
+
+        if (!input.value.trim()) {
+            output.textContent = 'Please enter some text';
+            output.className = 'mt-4 text-center text-red-600';
+            return;
+        }
+
+        try {
+            // Show loading state
+            output.textContent = 'Submitting...';
+            output.className = 'mt-4 text-center text-blue-600';
+
+            // Prepare form data as JSON object
+            const formData = {
+                userInput: input.value,
+                byArtist: byArtistCheckbox.checked,
+                randomize: randomizeCheckbox.checked,
+                sliderValues: sliderValues
+            };
+
+            // Perform POST request
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            // Check if the response is successful
+            if (response.ok) {
+                const errorText = await response.text();
+                output.textContent = `Success!`;
+                output.className = 'mt-4 text-center text-green-600';
+            } else {
+                // Handle error responses
+                const errorText = await response.text();
+                output.textContent = `Error: ${errorText}`;
+                output.className = 'mt-4 text-center text-red-600';
+            }
+        } catch (error) {
+            // Handle network errors
+            output.textContent = `Network Error: ${error.message}`;
+            output.className = 'mt-4 text-center text-red-600';
+        }
+    }
+    </script>
+</body>
+</html>
