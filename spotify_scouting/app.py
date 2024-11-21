@@ -5,6 +5,8 @@ from fastapi.responses import HTMLResponse, JSONResponse
 
 from spotify_scouting.models import SubmitRequest
 
+from time import time
+
 app = FastAPI()
 
 
@@ -16,9 +18,27 @@ def main_page():
 
 @app.post("/submit")
 def submit(body: Dict):
+    print(body)
     params = SubmitRequest(**body)
     print(params)
     return "we have submitted the playlist"
+
+@app.get("/jobs")
+def jobs():
+    if int(time()) % 2:
+        return [
+            {
+                "id": "job-123",
+                "name": "some playlist",
+                "status": "running"
+            },
+            {
+                "id": "job-456",
+                "name": "another playlist",
+                "status": "completed"
+            }
+        ]
+    return []
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
