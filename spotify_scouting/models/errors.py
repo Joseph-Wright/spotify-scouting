@@ -1,0 +1,3 @@
+
+class NotSignedIn(BaseException):
+    pass

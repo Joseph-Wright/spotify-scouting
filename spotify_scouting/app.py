@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from spotify_scouting.routes.base import base
+from routes.base import base
 
 
 app = FastAPI(

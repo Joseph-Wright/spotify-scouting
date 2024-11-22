@@ -8,9 +8,10 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/spotify_scouting/main.py}",
+            "program": "spotify_scouting/main.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/spotify_scouting"
+            "cwd": "${workspaceFolder}",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
