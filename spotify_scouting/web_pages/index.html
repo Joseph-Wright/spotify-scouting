@@ -11,7 +11,7 @@
         <button
             id="signInButton"
             onclick="handleSignIn()"
-            class="absolute -top-12 right-0 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+            class="absolute -top-12 right-0 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 z-50"
         >
             Sign In
         </button>
@@ -20,18 +20,15 @@
 
                 <h1 class="text-2xl font-bold mb-4 text-center">Parameters</h1>
 
-                <!-- Randomize Checkbox -->
+                <!-- Randomize button -->
                 <div class="mb-4">
-                    <label class="inline-flex items-center">
-                        <input
-                            type="checkbox"
-                            id="randomizeCheckbox"
-                            name="randomize"
-                            class="form-checkbox h-5 w-5 text-blue-600"
-                            onchange="toggleRandomize()"
-                        >
-                        <span class="ml-2 text-gray-700">Randomize</span>
-                    </label>
+                    <button
+                    onclick="handleRandomize()"
+                    id="randomizeButton"
+                    class="bg-blue-500 text-white px-4 py-1.5 rounded-md hover:bg-blue-600 transition duration-300"
+                >
+                    Randomize
+                </button>
                 </div>
 
                 <!-- Sliders -->
@@ -175,38 +172,22 @@
     }
 
     // Function to toggle randomize mode
-    function toggleRandomize() {
-        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
+    function handleRandomize() {
         const sliders = document.querySelectorAll('.slider-input');
+        sliders.forEach(slider => {
+            const randomValue = Math.floor(Math.random() * 101);
+            slider.value = randomValue;
 
-        if (randomizeCheckbox.checked) {
-            // Disable sliders and set random values
-            sliders.forEach(slider => {
-                slider.disabled = true;
-                slider.classList.add('opacity-50', 'cursor-not-allowed');
-
-                // Set random value between 0 and 100
-                const randomValue = Math.floor(Math.random() * 101);
-                slider.value = randomValue;
-
-                // Update corresponding value display
-                const valueSpan = document.getElementById(`${slider.id}Value`);
-                valueSpan.textContent = randomValue;
-            });
-        } else {
-            // Enable sliders
-            sliders.forEach(slider => {
-                slider.disabled = false;
-                slider.classList.remove('opacity-50', 'cursor-not-allowed');
-            });
-        }
+            // Update corresponding value display
+            const valueSpan = document.getElementById(`${slider.id}Value`);
+            valueSpan.textContent = randomValue;
+        });
     }
 
     async function handleSubmit() {
         const input = document.getElementById('textInput');
         const output = document.getElementById('output');
         const byArtistCheckbox = document.getElementById('byArtistCheckbox');
-        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
 
         // Collect slider values
         const sliderValues = {};
@@ -231,7 +212,6 @@
             const formData = {
                 userInput: input.value,
                 byArtist: byArtistCheckbox.checked,
-                randomize: randomizeCheckbox.checked,
                 sliderValues: sliderValues
             };
 
