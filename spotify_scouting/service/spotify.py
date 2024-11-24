@@ -73,12 +73,15 @@ class SpotifyService:
             followers = artist["followers"]["total"]
             link = result["external_urls"]["spotify"]
             if followers < 1500 and artist_id not in existing_artists:
-                print(name)
-                print(followers, "followers")
-                print(link)
-                print()
-                tracks.append(link)
-                existing_artists.add(artist_id)
+                albums = self.get_albums(artist_id=artist_id)
+                dates = [int(a["release_date"][:4]) for a in albums if a["release_date"]]
+                if not dates or min(dates) >= 2024:
+                    print(name)
+                    print(followers, "followers")
+                    print(link)
+                    print()
+                    tracks.append(link)
+                    existing_artists.add(artist_id)
         if tracks:
             self.sp.playlist_add_items(playlist_id, tracks)
 
@@ -111,6 +114,15 @@ class SpotifyService:
             return items
         playlists = recur_response(self.sp.user_playlists(self.get_user_id()))
         return playlists
+
+    def get_albums(self, artist_id: str):
+        def recur_response(response):
+            items = response["items"]
+            if response["next"]:
+                items += recur_response(self.sp.next(response))
+            return items
+        albums = recur_response(self.sp.artist_albums(artist_id=artist_id))
+        return albums
 
 class SpotifyHandler:
     def __init__(self):

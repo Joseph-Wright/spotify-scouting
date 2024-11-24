@@ -92,9 +92,3 @@ def auth_cb(request: Request, user_token: Annotated[Optional[str], Cookie()] = N
 @base.get("/cookie")
 def get_token(user_token: Annotated[Optional[str], Cookie()] = None):
     return {"user_token": user_token}
-
-
-@base.post("/cookie")
-def set_token(response: Response):
-
-    return

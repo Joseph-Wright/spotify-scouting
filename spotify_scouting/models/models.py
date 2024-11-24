@@ -11,5 +11,4 @@ class Sliders(BaseModel):
 class SubmitRequest(BaseModel):
     userInput: str
     byArtist: bool
-    randomize: bool
     sliderValues: Sliders
