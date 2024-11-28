@@ -35,6 +35,7 @@ class SpotifyService:
 
     def submit_playlist(self, params: SubmitRequest):
         seed_artists = []
+        seed_tracks = None
 
         input_playlist = self.sp.playlist(params.userInput)
         output_playlist_name = input_playlist["name"] + (
@@ -72,10 +73,10 @@ class SpotifyService:
             name = result["artists"][0]["name"]
             followers = artist["followers"]["total"]
             link = result["external_urls"]["spotify"]
-            if followers < 1500 and artist_id not in existing_artists:
+            if followers < 2500 and artist_id not in existing_artists:
                 albums = self.get_albums(artist_id=artist_id)
                 dates = [int(a["release_date"][:4]) for a in albums if a["release_date"]]
-                if not dates or min(dates) >= 2024:
+                if not dates or min(dates) >= 2022:
                     print(name)
                     print(followers, "followers")
                     print(link)
