@@ -92,7 +92,7 @@ class SpotifyService:
             playlist
             for playlist
             in playlists
-            if playlist_name == playlist["name"]
+            if playlist and playlist_name == playlist.get("name")
         ]
         if len(filtered_playlists) > 1:
             raise Exception(f"duplicate playlists with name {playlist_name}")
